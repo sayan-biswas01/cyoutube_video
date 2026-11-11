@@ -1,0 +1,25 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node -watch index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@remotion/bundler": "^4.0.542",
+    "@remotion/renderer": "^4.0.542",
+    "axios": "^1.21.1",
+    "cors": "^2.8.6",
+    "express": "^4.22.3",
+    "google-tts-api": "^2.0.2",
+    "msedge-tts": "^2.1.1",
+    "node-cron": "^4.6.0"
+  }
+}

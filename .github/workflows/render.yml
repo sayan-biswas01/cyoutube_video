@@ -1,0 +1,52 @@
+name: 🎬 3D Video Render Factory
+
+on:
+  # ১. আপনি চাইলে গিটহাব থেকে এক ক্লিকে ম্যানুয়ালি ভিডিও বানাতে পারবেন
+  workflow_dispatch:
+    inputs:
+      channel_niche:
+        description: "কোন নিশের ভিডিও বানাতে চান?"
+        required: true
+        default: "world_data"
+
+  # ২. প্রতিদিন নির্দিষ্ট সময়ে অটোমেটিক চলবে (যেমন: প্রতিদিন সকাল ১০টায়)
+  schedule:
+    - cron: "0 10 * * *"
+
+jobs:
+  build_and_render:
+    runs-on: ubuntu-latest # গিটহাবের শক্তিশালী ফ্রি লিনাক্স সার্ভার
+
+    steps:
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
+
+      - name: ⚙️ Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: 📦 Install Linux Dependencies for 3D/Remotion
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libnss3 libatk1.0-0 libatk-bridge2.0-0 libcups2 libdrm2 libxkbcommon0 libxcomposite1 libxdamage1 libxfixes3 libxrandr2 libgbm1 libasound2 ffmpeg
+
+      - name: 📦 Install Client Packages
+        working-directory: ./Client
+        run: npm install
+
+      - name: 📦 Install Server Packages
+        working-directory: ./server
+        run: npm install
+
+      - name: 🎥 Render Cinematic 3D Video
+        working-directory: ./server
+        env:
+          CHANNEL_NICHE: ${{ github.event.inputs.channel_niche || 'world_data' }}
+        run: node index.js
+
+      - name: 📤 Upload Rendered MP4 (ডাউনলোডের জন্য সেভ করা)
+        uses: actions/upload-artifact@v4
+        with:
+          name: Rendered-Shorts-Video
+          path: server/outputs/*.mp4
