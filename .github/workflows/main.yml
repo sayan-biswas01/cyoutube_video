@@ -20,51 +20,12 @@ jobs:
         with:
           node-version: '20'
 
-    name: 3D Video Render Factory
-
-on:
-  workflow_dispatch:
-  push:
-    branches:
-      - master
-      - main
-
-jobs:
-  build_and_render:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
       - name: Install Linux Dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y libnss3 libatk1.0-0 libatk-bridge2.0-0 libcups2 libdrm2 libxkbcommon0 libxcomposite1 libxdamage1 libxfixes3 libxrandr2 libgbm1 ffmpeg
           sudo apt-get install -y libasound2t64 || sudo apt-get install -y libasound2 || true
-          
-      - name: Install Client Packages
-        working-directory: ./Client
-        run: npm install
 
-      - name: Install Server Packages
-        working-directory: ./server
-        run: npm install
-
-      - name: Render Cinematic 3D Video
-        working-directory: ./server
-        run: node index.js
-
-      - name: Upload Rendered MP4
-        uses: actions/upload-artifact@v4
-        with:
-          name: Rendered-Shorts-Video
-          path: server/outputs/*.mp4
       - name: Install Client Packages
         working-directory: ./Client
         run: npm install
